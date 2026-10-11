@@ -48,8 +48,9 @@ local.properties
 *.iml
 *.hprof
 .cxx/
+# Signing keys are never published, including the local debug keystore.
+# (Fresh clones: generate a local debug keystore — see README, Android.)
 *.keystore
-!debug.keystore
 .kotlin/
 
 # node.js
@@ -77,6 +78,15 @@ node_modules/
 
 # Local Bundler config (machine-specific install path)
 .bundle/
+
+# Internal planning / progress / agent notes. These stay in the local
+# working tree but are not published. Root-scoped so same-named files
+# inside the source tree (if any ever appear) are unaffected.
+/TODO.md
+/PROGRESS.md
+/AGENTS.md
+/PROJECT_RULES.md
+/PAGE_SIZE_FIX.md
 
 # Android release artifacts that may be copied out of build/ (debug outputs
 # stay under build/ which is ignored above). Never commit signing keys:

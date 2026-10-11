@@ -5,12 +5,9 @@ directories, dependencies, screens, or features that are not verified below.
 
 ## 1. Identity
 
-- Project: ShutterTap (student project, migrated from legacy EarShot).
-- Root: `/Users/ombadgujar/Development/ShutterTap`
-- Legacy reference (READ-ONLY, never modify):
-  `/Users/ombadgujar/Development/EarShot` — native Kotlin Android app
-  (`com.earshot`) with Bluetooth, CameraX, media-button, gallery,
-  gesture, and ViewModel layers.
+- Project: ShutterTap (student project, migrated from a legacy native
+  Android reference app, kept outside this repository).
+- Root: the repository root (referred to below as `<repo>`).
 - No Git operations are performed in this project (owner handles Git manually).
 
 ## 2. Verified versions (installed, from node_modules + tool output)
