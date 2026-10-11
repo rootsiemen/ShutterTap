@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "ShutterTap",
+    "slug": "shuttertap",
+    "version": "0.0.1",
+    "android": {
+      "package": "com.anonymous.shuttertap"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.shuttertap"
+    }
+  }
+}
