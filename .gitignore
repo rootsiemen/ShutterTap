@@ -39,6 +39,12 @@ DerivedData
 *.xcuserstate
 **/.xcode.env.local
 
+# Code signing / provisioning — never publish credentials or profiles
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
 # Android/IntelliJ
 #
 build/
@@ -51,11 +57,14 @@ local.properties
 # Signing keys are never published, including the local debug keystore.
 # (Fresh clones: generate a local debug keystore — see README, Android.)
 *.keystore
+*.jks
 .kotlin/
 
 # node.js
 #
 node_modules/
+.eslintcache
+*.tsbuildinfo
 
 # fastlane
 #
@@ -79,29 +88,47 @@ node_modules/
 # Local Bundler config (machine-specific install path)
 .bundle/
 
-# Internal planning / progress / agent notes. These stay in the local
-# working tree but are not published. Root-scoped so same-named files
+# Internal planning / progress / audit / agent notes. These stay in the
+# local working tree but are not published. Root-scoped so same-named files
 # inside the source tree (if any ever appear) are unaffected.
 /TODO.md
 /PROGRESS.md
 /AGENTS.md
 /PROJECT_RULES.md
 /PAGE_SIZE_FIX.md
+/AUDIT_REPORT.md
+/ANDROID_UI_AUDIT.md
+/ANDROID_VERIFICATION_REPORT.md
+/NEXT_STEP_PROMPT.md
+/.opencode/
+/.claude/
+/opencode.json
 
 # Android release artifacts that may be copied out of build/ (debug outputs
-# stay under build/ which is ignored above). Never commit signing keys:
-# only the shared debug keystore is kept (see exception below).
+# stay under build/ which is ignored above). Never commit signing keys,
+# including the local debug keystore (generate one per machine — see README).
 *.apk
 *.aab
+
+# Temporary / merge artifacts
+*.orig.*
+*.rej
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
 
 # Expo dev-client / CLI state (machine-specific device history, server settings)
 .expo/
+.expo-shared/
+
+# Expo generated output (web/native export bundles, generated type shims)
+dist/
+web-build/
+expo-env.d.ts
 
 # testing
 /coverage
+.nyc_output/
 
 # Yarn
 .yarn/*
