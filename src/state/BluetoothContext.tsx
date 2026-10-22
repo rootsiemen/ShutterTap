@@ -1,11 +1,15 @@
 // src/state/BluetoothContext.tsx
 import React, { createContext, useEffect, useState, ReactNode } from 'react';
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import { NativeEventEmitter } from 'react-native';
 import { BluetoothDevice } from '../types/models';
+import { getBluetoothModule } from '../native/modules';
 
-// Native module bridge (will be implemented in Kotlin)
-const { BluetoothModule } = NativeModules as any;
-const bluetoothEmitter = BluetoothModule ? new NativeEventEmitter(BluetoothModule) : null;
+// Native module bridge (implemented natively per ST-P0-07; until then the
+// getter below resolves to undefined and every call degrades safely).
+const bluetoothModule = getBluetoothModule();
+const bluetoothEmitter = bluetoothModule
+  ? new NativeEventEmitter(bluetoothModule)
+  : null;
 
 interface BluetoothState {
   devices: BluetoothDevice[];
@@ -49,17 +53,30 @@ export const BluetoothProvider = ({ children }: { children: ReactNode }) => {
       setState(prev => ({ ...prev, ...newState }));
     });
     // initial fetch – the native method returns an object { devices: [], state: { scanning: false, ... } }
-    BluetoothModule?.getInitialState?.().then((init: any) => {
-      // Guard against unexpected shape
-      if (init && typeof init === 'object') {
-        const { devices = [], state: innerState = {} } = init;
-        setState(prev => ({
-          ...prev,
-          devices,
-          ...innerState,
-        }));
-      }
-    });
+    // A rejection means a present-but-broken bridge: surface it instead of
+    // leaving an unhandled promise rejection. (When no bridge exists the
+    // optional chain above short-circuits and neither callback runs.)
+    getBluetoothModule()
+      ?.getInitialState?.()
+      .then(
+        (init: any) => {
+          // Guard against unexpected shape
+          if (init && typeof init === 'object') {
+            const { devices = [], state: innerState = {} } = init;
+            setState(prev => ({
+              ...prev,
+              devices,
+              ...innerState,
+            }));
+          }
+        },
+        () => {
+          setState(prev => ({
+            ...prev,
+            error: 'Failed to read Bluetooth state',
+          }));
+        },
+      );
     return () => {
       devicesSub?.remove();
       stateSub?.remove();
@@ -67,17 +84,17 @@ export const BluetoothProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const startScan = () => {
-    BluetoothModule?.startScan?.();
+    getBluetoothModule()?.startScan?.();
     setState(prev => ({ ...prev, scanning: true }));
   };
   const stopScan = () => {
-    BluetoothModule?.stopScan?.();
+    getBluetoothModule()?.stopScan?.();
     setState(prev => ({ ...prev, scanning: false }));
   };
   const connectToDevice = (address: string) => {
-    // Indicate connecting state
-    setState(prev => ({ ...prev, connecting: true }));
-    const promise = BluetoothModule?.connect?.(address);
+    // A new attempt supersedes any previous error.
+    setState(prev => ({ ...prev, connecting: true, error: undefined }));
+    const promise = getBluetoothModule()?.connect?.(address);
     if (promise && typeof promise.then === 'function') {
         promise
             .then(() => {
@@ -93,7 +110,7 @@ export const BluetoothProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   const refreshState = () => {
-    BluetoothModule?.refreshState?.();
+    getBluetoothModule()?.refreshState?.();
   };
 
   return (

@@ -2,7 +2,9 @@
 
 /**
  * Represents a Bluetooth device discovered or paired on Android.
- * Mirrors the Kotlin data class com.shuttertap.bluetooth.BluetoothDevice.
+ * Shape agreed with the planned native port (ST-P0-07): port the EarShot
+ * reference model under the `com.anonymous.shuttertap.*` namespace
+ * (matching applicationId) emitting exactly these fields.
  */
 export interface BluetoothDevice {
   address: string;
