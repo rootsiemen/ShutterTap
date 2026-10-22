@@ -119,10 +119,12 @@ ShutterTap/
 ├── index.js                # JS entry (registers "main")
 ├── src/
 │   ├── screens/            # Home, Device, Gesture, Camera, Gallery, MediaButton
+│   ├── components/         # AppIcon, layout/button/state/device primitives
 │   ├── navigation/         # Bottom-tab navigator
 │   ├── state/              # BluetoothContext
+│   ├── native/             # Centralized native-bridge accessor (modules.ts)
 │   ├── types/              # Shared models (devices, gestures, actions)
-│   └── theme.ts            # Light / dark themes
+│   └── theme.ts            # Design tokens + light / dark themes
 ├── android/                # Expo-managed native project (Gradle, Kotlin)
 ├── ios/                    # Expo-managed native project (Swift, Pods)
 ├── __tests__/              # Jest tests

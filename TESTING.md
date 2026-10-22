@@ -43,9 +43,9 @@ npx expo start --dev-client
 
 ```sh
 npx tsc --noEmit     # expected: PASS (exit 0)
-npx eslint .         # expected: PASS (exit 0)
-npm test             # currently FAILS (PNG asset transform, ST-P1-03)
-npx expo-doctor      # currently 16/21 pass, 5 known fails (see ARCHITECTURE.md §8)
+npx eslint .         # expected: 0 errors (theme-driven inline-style warnings accepted)
+npm test             # expected: PASS (4 suites: tokens/components, screens, bluetooth, app)
+npx expo-doctor      # 19/21 (residuals: non-CNG notice + expo patch drift, see PROGRESS 2026-10-16)
 ```
 
 ## 3. Android
